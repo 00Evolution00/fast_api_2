@@ -1,4 +1,3 @@
-import uuid
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -13,8 +12,12 @@ router = APIRouter()
 
 async def get_db():
     async with database.session() as session:
-        yield session
-
+        try:
+            yield session
+            await session.commit()
+        except:
+            await session.rollback()
+            raise
 
 @router.post(
     "/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED
@@ -44,7 +47,7 @@ async def get_users(db: AsyncSession = Depends(get_db)) -> List[UserResponse]:
 
 
 @router.get("/{user_id}", response_model=UserResponse, status_code=status.HTTP_200_OK)
-async def get_user(user_id: uuid.UUID, db: AsyncSession = Depends(get_db)):
+async def get_user(user_id: str, db: AsyncSession = Depends(get_db)):
     repo = UserRepository(db)
     user = await repo.get(user_id)
     if user is None:
@@ -56,7 +59,7 @@ async def get_user(user_id: uuid.UUID, db: AsyncSession = Depends(get_db)):
 
 @router.put("/{user_id}", response_model=UserResponse, status_code=status.HTTP_200_OK)
 async def update_user(
-    user_id: uuid.UUID, user_update: UserUpdate, db: AsyncSession = Depends(get_db)
+    user_id: str, user_update: UserUpdate, db: AsyncSession = Depends(get_db)
 ):
     repo = UserRepository(db)
 
@@ -72,7 +75,7 @@ async def update_user(
 
 
 @router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_user(user_id: uuid.UUID, db: AsyncSession = Depends(get_db)):
+async def delete_user(user_id: str, db: AsyncSession = Depends(get_db)):
     repo = UserRepository(db)
 
     db_user = await repo.get(user_id)

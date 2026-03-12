@@ -1,4 +1,3 @@
-import uuid
 from datetime import datetime
 from typing import Optional
 
@@ -13,9 +12,9 @@ class PostBase(BaseModel):
 
 
 class PostCreate(PostBase):
-    author_id: uuid.UUID
-    category_id: Optional[uuid.UUID] = None
-    location_id: Optional[uuid.UUID] = None
+    author_id: str
+    category_id: Optional[str] = None
+    location_id: Optional[str] = None
 
 
 class PostUpdate(BaseModel):
@@ -23,15 +22,15 @@ class PostUpdate(BaseModel):
     text: Optional[str] = None
     pub_date: Optional[datetime] = None
     is_published: Optional[bool] = None
-    category_id: Optional[uuid.UUID] = None
-    location_id: Optional[uuid.UUID] = None
+    category_id: Optional[str] = None
+    location_id: Optional[str] = None
 
 
 class PostResponse(PostBase):
-    id: uuid.UUID
-    author_id: uuid.UUID
-    category_id: Optional[uuid.UUID]
-    location_id: Optional[uuid.UUID]
+    id: str
+    author_id: str
+    category_id: Optional[str]
+    location_id: Optional[str]
     image: Optional[str] = None
     created_at: datetime
     comment_count: Optional[int] = None

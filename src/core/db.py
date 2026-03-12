@@ -28,6 +28,7 @@ class SQLiteDatabase:
             class_=AsyncSession,
         )
 
+
     @asynccontextmanager
     async def session(self) -> AsyncIterator[AsyncSession]:
         async with self._session_factory() as session:
@@ -56,3 +57,6 @@ class Base(DeclarativeBase):
         datetime: DateTime(),
         bool: Boolean,
     }
+async def init_models():
+    async with database._engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)

@@ -6,7 +6,12 @@ from src.api.routes.posts import router as posts_router
 
 
 def create_app() -> FastAPI:
-    app = FastAPI(root_path="/api/v1")
+    from src.main import lifespan
+    
+    app = FastAPI(
+        root_path="/api/v1",
+        lifespan=lifespan
+    )
 
     app.add_middleware(
         CORSMiddleware,

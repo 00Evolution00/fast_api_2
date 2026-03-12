@@ -25,6 +25,7 @@ class BaseRepository(Generic[T]):
         db_obj = self.model(**data)
         self.session.add(db_obj)
         await self.session.flush()
+        await self.session.refresh(db_obj)
         return db_obj
 
     async def update(self, db_obj: T, update_data: dict) -> T:

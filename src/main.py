@@ -1,14 +1,23 @@
-import sys
-import os
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-
 import asyncio
+import os
+import sys
+from contextlib import asynccontextmanager
+
+sys.path.insert(
+    0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+)
 
 import uvicorn
 
 from src.app import create_app
+from src.core.db import init_models
+
+
+@asynccontextmanager
+async def lifespan(app):
+    await init_models()
+    yield
+
 
 app = create_app()
 
