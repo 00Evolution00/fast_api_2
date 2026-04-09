@@ -3,6 +3,8 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
+from src.core.validators import PostValidators
+
 
 class PostBase(BaseModel):
     title: str = Field(max_length=255)
@@ -11,7 +13,7 @@ class PostBase(BaseModel):
     is_published: bool = True
 
 
-class PostCreate(PostBase):
+class PostCreate(PostBase, PostValidators):
     author_id: str
     category_id: Optional[str] = None
     location_id: Optional[str] = None
