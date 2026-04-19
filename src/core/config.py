@@ -9,6 +9,11 @@ class Settings(BaseSettings):
 
     SQLITE_DB_PATH: str = "app.db"
 
+    # JWT settings
+    SECRET_KEY: str = "your-secret-key-here-change-in-production"
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
     @computed_field
     @property
     def sqlite_url(self) -> str:

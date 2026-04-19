@@ -47,12 +47,12 @@ class DatabaseError(BaseException):
         super().__init__(self.message)
 
 
-class CredentialsException(HTTPException):
-    def __init__(self, detail: str) -> None:
-        self.detail = detail
-
+class AuthenticationError(HTTPException):
+    """Unified authentication exception for all auth-related errors."""
+    
+    def __init__(self, detail: str, status_code: int = status.HTTP_401_UNAUTHORIZED) -> None:
         super().__init__(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=status_code,
             detail=detail,
             headers={"WWW-Authenticate": "Bearer"},
         )
