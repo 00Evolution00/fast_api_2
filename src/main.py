@@ -15,11 +15,23 @@ from src.core.db import init_models
 
 @asynccontextmanager
 async def lifespan(app):
+    # Initialize database models
     await init_models()
+    
+    # Create logs directory
+    os.makedirs('/app/logs', exist_ok=True)
+    
     yield
 
 
 app = create_app()
+
+
+# Add health check endpoint
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for Docker."""
+    return {"status": "healthy", "service": "fastapi-backend"}
 
 
 async def run() -> None:

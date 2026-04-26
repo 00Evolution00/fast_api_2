@@ -17,9 +17,9 @@ from src.core.config import settings
 from src.core.exceptions import DatabaseError
 
 
-class SQLiteDatabase:
+class Database:
     def __init__(self) -> None:
-        self._engine = create_async_engine(settings.sqlite_url)
+        self._engine = create_async_engine(settings.database_url)
         self._session_factory = async_sessionmaker(
             bind=self._engine,
             autocommit=False,
@@ -27,7 +27,6 @@ class SQLiteDatabase:
             expire_on_commit=False,
             class_=AsyncSession,
         )
-
 
     @asynccontextmanager
     async def session(self) -> AsyncIterator[AsyncSession]:
@@ -44,7 +43,7 @@ class SQLiteDatabase:
                 await session.close()
 
 
-database = SQLiteDatabase()
+database = Database()
 metadata = MetaData()
 
 
@@ -55,8 +54,10 @@ class Base(DeclarativeBase):
         uuid.UUID: String(),
         Dict[str, Any]: JSON,
         datetime: DateTime(),
-        bool: Boolean,
+        bool: Boolean(),
     }
+
+
 async def init_models():
     async with database._engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)

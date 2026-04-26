@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  # FastAPI Application with SQLite
+  api:
+    build: .
+    container_name: fastapi_backend
+    environment:
+      - SQLITE_DB_PATH=/app/data/app.db
+      - SECRET_KEY=${SECRET_KEY:-your-secret-key-here-change-in-production}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - DEBUG=${DEBUG:-false}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - fastapi_network
+    restart: unless-stopped
+
+networks:
+  fastapi_network:
+    driver: bridge
