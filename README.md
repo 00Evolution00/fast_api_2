@@ -1,32 +1,19 @@
-# FastAPI Backend with SQLite
+# FastAPI + PostgreSQL + Docker
 
-This is a FastAPI backend application configured to use SQLite database.
+Проект запускается в двух контейнерах:
+- `db` (PostgreSQL)
+- `api` (FastAPI)
 
-## Setup
+При старте `api` автоматически выполняются миграции Alembic.
 
-1. Install dependencies:
+## Запуск
+
 ```bash
-pip install -r requirements.txt
+docker compose up --build
 ```
 
-2. Run database migrations:
-```bash
-alembic upgrade head
-```
+## Что доступно после старта
 
-3. Start the application:
-```bash
-uvicorn src.main:app --reload
-```
-
-## Environment Variables
-
-You can customize the SQLite database path by setting `SQLITE_DB_PATH` in your `.env` file:
-
-```
-SQLITE_DB_PATH=app.db
-```
-
-## Database
-
-The application uses SQLite as the database backend. The database file will be created automatically when you run the migrations for the first time.
+- API: `http://localhost:8000`
+- Swagger: `http://localhost:8000/docs`
+- PostgreSQL в сети Docker: `db:5432`

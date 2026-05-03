@@ -1,52 +1,15 @@
-# Docker
-Dockerfile
-docker-compose.yml
-.dockerignore
-
-# Environment
-.env
-.env.local
-
-# Logs
-logs/
-*.log
-
-# Database
-*.db
-*.sqlite3
-
-# Python
-__pycache__/
+.git
+.idea
+.vscode
+__pycache__
 *.pyc
 *.pyo
 *.pyd
-.Python
-env/
-venv/
-.venv/
-pip-log.txt
-pip-delete-this-directory.txt
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Coverage
-.coverage
-htmlcov/
-
-# pytest
-.pytest_cache/
-.pytest.ini
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
+.venv
+venv
+env
+.env
+logs
+data
+*.db
+*.sqlite3

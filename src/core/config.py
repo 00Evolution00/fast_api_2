@@ -8,7 +8,11 @@ class Settings(BaseSettings):
     )
 
     # Database Configuration
-    SQLITE_DB_PATH: str = "app.db"
+    POSTGRES_HOST: str = "db"
+    POSTGRES_PORT: int = 5432
+    POSTGRES_DB: str = "fastapi_db"
+    POSTGRES_USER: str = "fastapi_user"
+    POSTGRES_PASSWORD: str = "fastapi_password"
     DATABASE_URL: str | None = None
     
     # JWT settings
@@ -25,14 +29,16 @@ class Settings(BaseSettings):
 
     @computed_field
     @property
-    def sqlite_url(self) -> str:
-        return f"sqlite+aiosqlite:///{self.SQLITE_DB_PATH}"
+    def postgres_url(self) -> str:
+        return (
+            f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
+            f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        )
 
     @computed_field
     @property
     def database_url(self) -> str:
-        """Use PostgreSQL if DATABASE_URL is set, otherwise use SQLite"""
-        return self.DATABASE_URL or self.sqlite_url
+        return self.DATABASE_URL or self.postgres_url
 
     @computed_field
     @property
